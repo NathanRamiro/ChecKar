@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.js": "/ChecKar/static/js/main.20c188c5.chunk.js",
-    "main.js.map": "/ChecKar/static/js/main.20c188c5.chunk.js.map",
+    "main.js": "/ChecKar/static/js/main.b969fa04.chunk.js",
+    "main.js.map": "/ChecKar/static/js/main.b969fa04.chunk.js.map",
     "runtime-main.js": "/ChecKar/static/js/runtime-main.4c094d30.js",
     "runtime-main.js.map": "/ChecKar/static/js/runtime-main.4c094d30.js.map",
     "static/css/2.4c97ca4f.chunk.css": "/ChecKar/static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.debbf421.chunk.js": "/ChecKar/static/js/2.debbf421.chunk.js",
-    "static/js/2.debbf421.chunk.js.map": "/ChecKar/static/js/2.debbf421.chunk.js.map",
+    "static/js/2.2b02a982.chunk.js": "/ChecKar/static/js/2.2b02a982.chunk.js",
+    "static/js/2.2b02a982.chunk.js.map": "/ChecKar/static/js/2.2b02a982.chunk.js.map",
     "index.html": "/ChecKar/index.html",
     "static/css/2.4c97ca4f.chunk.css.map": "/ChecKar/static/css/2.4c97ca4f.chunk.css.map",
-    "static/js/2.debbf421.chunk.js.LICENSE.txt": "/ChecKar/static/js/2.debbf421.chunk.js.LICENSE.txt"
+    "static/js/2.2b02a982.chunk.js.LICENSE.txt": "/ChecKar/static/js/2.2b02a982.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4c094d30.js",
     "static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.debbf421.chunk.js",
-    "static/js/main.20c188c5.chunk.js"
+    "static/js/2.2b02a982.chunk.js",
+    "static/js/main.b969fa04.chunk.js"
   ]
 }
