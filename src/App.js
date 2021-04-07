@@ -22,7 +22,8 @@ function App() {
   const [codigoDaMarcaSelecionada, setCodigoDaMarcaSelecionada] = useState('')
   //armazena o nome do veiculo selecionado
   const [veiculoSelecionado, setVeiculoSelecionado] = useState('')
-
+  //armazena o codigo do veiculo selecionado
+  const [codigoDoVeiculoSelecionado, setCodigoDoVeiculoSelecionado] = useState('')
 
   //armazena a marcas
   const [marcasDeVeiculo, setMarcasDeVeiculo] = useState([])
@@ -30,6 +31,8 @@ function App() {
   const [veiculosDaMarca, setVeiculosDaMarca] = useState([])
   //armazena os veiculos especificos
   const [veiculos, setVeiculos] = useState([])
+  //armazena informações especificas dos veiculos
+  const [dadosVeiculos, setDadosVeiculos] = useState([])
 
   //o segundo select (Marcas)
   const selectMarcas = useRef(null)
@@ -77,6 +80,14 @@ function App() {
     }
     
   }, [veiculosDaMarca])
+
+  useEffect(()=>{
+
+    if(veiculos[0] !== null && veiculos[0] !== undefined){
+      ObterDadosDeVeiculoEspecifico()
+    }
+
+  },[veiculos])
 
   //obtem as marcas para um determinado tipo de veiculo
   async function ObterMarcas(props) {
@@ -192,6 +203,8 @@ function App() {
 
       if (valor.info[index].name === props){
 
+        setCodigoDoVeiculoSelecionado(valor.info[index].id)
+
         url = `https://fipeapi.appspot.com/api/1/${tipoVeiculo}/veiculo/${codigoDaMarcaSelecionada}/${valor.info[index].id}.json`
       
       }
@@ -220,6 +233,80 @@ function App() {
         console.error(error)
         setVeiculoSelecionado('')//em caso de erro o Select desaparece
       })
+
+  }
+  //obtem ainda mais informações do veiculo
+  async function ObterDadosDeVeiculoEspecifico(){
+
+
+    
+    let anos = [veiculos[0] ? veiculos[0].info.id:'',
+                veiculos[1] ? veiculos[1].info.id:'',
+                veiculos[2] ? veiculos[2].info.id:'']
+
+    let urls = [
+      `https://fipeapi.appspot.com/api/1/${tipoVeiculo}/veiculo/${codigoDaMarcaSelecionada}/${codigoDoVeiculoSelecionado}/${anos[0]}.json`,
+      `https://fipeapi.appspot.com/api/1/${tipoVeiculo}/veiculo/${codigoDaMarcaSelecionada}/${codigoDoVeiculoSelecionado}/${anos[1]}.json`,
+      `https://fipeapi.appspot.com/api/1/${tipoVeiculo}/veiculo/${codigoDaMarcaSelecionada}/${codigoDoVeiculoSelecionado}/${anos[2]}.json`
+    ]
+
+    let dados = []
+  
+    if(anos[0] !== ``){
+
+      await fetch(urls[0])
+      .then(response =>response.json())
+      .then(data =>{
+        
+        let {...info} = data
+        
+        dados.push(info)
+        
+      })
+      .catch(error => {
+        
+        console.error(error)
+        
+      })
+    }
+
+    if(anos[1] !== ``){
+
+      await fetch(urls[1])
+      .then(response =>response.json())
+      .then(data =>{
+        
+        let {...info} = data
+        
+        dados.push(info)
+        
+      })
+      .catch(error => {
+        
+        console.error(error)
+        
+      })
+    }
+    
+    if(anos[2] !== ``){
+
+      await fetch(urls[2])
+      .then(response =>response.json())
+      .then(data =>{
+        
+        let {...info} = data
+        
+        dados.push(info)
+        
+      })
+      .catch(error => {
+
+        console.error(error)
+
+      })
+    }
+      
+      setDadosVeiculos(dados)
 
   }
 
@@ -326,13 +413,17 @@ function App() {
       {veiculoSelecionado && marcaSelecionada && tipoVeiculo &&
         <Jumbotron>
 
-        {veiculos[0] &&
+        {dadosVeiculos[0] &&
           <Card bg='secondary' text='light'>
             <Card.Header>
-              <Card.Title>{veiculos[0]? veiculos[0].info.veiculo:''}</Card.Title>
-              <Card.Subtitle>{veiculos[0]? veiculos[0].info.name:''}</Card.Subtitle>
+              <Card.Title>{dadosVeiculos[0]? dadosVeiculos[0].veiculo:''}</Card.Title>
+              <Card.Subtitle>{dadosVeiculos[0]? dadosVeiculos[0].marca:''}</Card.Subtitle>
             </Card.Header>
             <Card.Body>
+
+              {dadosVeiculos[0]? dadosVeiculos[0].veiculo:''} &nbsp;
+              {dadosVeiculos[0]? dadosVeiculos[0].ano_modelo:''} &nbsp;
+
                 {
                   tipoVeiculo === 'Carros'
                     ? <FaCarSide />
@@ -340,6 +431,10 @@ function App() {
                       ? <FaMotorcycle />
                       : <FaTruck />
                 } &nbsp;
+                {dadosVeiculos[0]? dadosVeiculos[0].combustivel:''}
+              <br></br><br></br>
+              {dadosVeiculos[0]? dadosVeiculos[0].preco:''} 
+
             </Card.Body>
             <Card.Footer>
               <Button variant='success'> Fale Com Nossos Vendedores </Button>
@@ -347,13 +442,17 @@ function App() {
           </Card>
         }
         <br></br>
-        {veiculos[1] &&
+        {dadosVeiculos[1] &&
           <Card bg='secondary' text='light'>
             <Card.Header>
-              <Card.Title>{veiculos[1]? veiculos[1].info.veiculo:''}</Card.Title>
-              <Card.Subtitle>{veiculos[1]? veiculos[1].info.name:''}</Card.Subtitle>
+              <Card.Title>{dadosVeiculos[1]? dadosVeiculos[1].veiculo:''}</Card.Title>
+              <Card.Subtitle>{dadosVeiculos[1]? dadosVeiculos[1].marca:''}</Card.Subtitle>
             </Card.Header>
             <Card.Body>
+
+              {dadosVeiculos[1]? dadosVeiculos[1].veiculo:''} &nbsp;
+              {dadosVeiculos[1]? dadosVeiculos[1].ano_modelo:''} &nbsp;
+
                 {
                   tipoVeiculo === 'Carros'
                     ? <FaCarSide />
@@ -361,6 +460,10 @@ function App() {
                       ? <FaMotorcycle />
                       : <FaTruck />
                 } &nbsp;
+                {dadosVeiculos[1]? dadosVeiculos[1].combustivel:''}
+              <br></br><br></br>
+              {dadosVeiculos[1]? dadosVeiculos[1].preco:''} 
+              
             </Card.Body>
             <Card.Footer>
               <Button variant='success'> Fale Com Nossos Vendedores </Button>
@@ -368,13 +471,17 @@ function App() {
           </Card>
         }
         <br></br>
-        {veiculos[2] &&
+        {dadosVeiculos[2] &&
           <Card bg='secondary' text='light'>
             <Card.Header>
-              <Card.Title>{veiculos[2]? veiculos[2].info.veiculo:''}</Card.Title>
-              <Card.Subtitle>{veiculos[2]? veiculos[2].info.name:''}</Card.Subtitle>
+              <Card.Title>{dadosVeiculos[2]? dadosVeiculos[2].veiculo:''}</Card.Title>
+              <Card.Subtitle>{dadosVeiculos[2]? dadosVeiculos[2].marca:''}</Card.Subtitle>
             </Card.Header>
             <Card.Body>
+
+              {dadosVeiculos[2]? dadosVeiculos[2].veiculo:''} &nbsp;
+              {dadosVeiculos[2]? dadosVeiculos[2].ano_modelo:''} &nbsp;
+
                 {
                   tipoVeiculo === 'Carros'
                     ? <FaCarSide />
@@ -382,6 +489,10 @@ function App() {
                       ? <FaMotorcycle />
                       : <FaTruck />
                 } &nbsp;
+                {dadosVeiculos[2]? dadosVeiculos[2].combustivel:''}
+              <br></br><br></br>
+              {dadosVeiculos[2]? dadosVeiculos[2].preco:''} 
+              
             </Card.Body>
             <Card.Footer>
               <Button variant='success'> Fale Com Nossos Vendedores </Button>
